@@ -1,0 +1,20 @@
+[Unit]
+Description=Enterprise AI Admin Panel
+After=network-online.target docker.service
+[Service]
+User=root
+WorkingDirectory=${INSTALL_DIR}/admin-panel
+EnvironmentFile=/etc/enterprise-ai-platform/customer.env
+Environment=ADMIN_DB=${PRIVATE_DIR}/admin.db
+Environment=LIBRECHAT_ENV=/etc/enterprise-ai-platform/customer.env
+Environment=LIBRECHAT_CONFIG=${INSTALL_DIR}/librechat.yaml
+Environment=LIBRECHAT_MONGO_CONTAINER=enterprise-ai-platform-jichat-mongodb-1
+Environment=SUB2API_ENV=/etc/enterprise-ai-platform/customer.env
+Environment=CONFIG_VAULT_ADMIN_FILE=${PRIVATE_DIR}/vault-admins.json
+Environment=CONFIG_VAULT_ADMIN_CLI=${INSTALL_DIR}/config-vault/admin-users.mjs
+Environment=ADMIN_HOST=127.0.0.1
+Environment=ADMIN_PORT=8090
+ExecStart=/usr/bin/python3 ${INSTALL_DIR}/admin-panel/server.py
+Restart=always
+[Install]
+WantedBy=multi-user.target

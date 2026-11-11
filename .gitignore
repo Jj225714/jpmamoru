@@ -14,6 +14,13 @@ web/dist
 server-snapshot/
 server-snapshot.tar.gz
 
+# Jadmin 的运行数据库、缓存和私有配置。
+jadmin/*.db
+jadmin/*.sqlite
+jadmin/*.sqlite3
+jadmin/__pycache__/
+jadmin/.env*
+
 **/dist
 web/public/plugins
 plugins/canvas/*/dist
