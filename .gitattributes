@@ -1,0 +1,5 @@
+# Jadmin 代码与当前服务器部署文件保持逐字节一致。
+jadmin/*.py -text
+jadmin/*.js -text
+jadmin/README.md -text
+jadmin/requirements.txt -text
