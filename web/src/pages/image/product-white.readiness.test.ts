@@ -1,0 +1,132 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { StoredImageRef } from "@/types/commerce";
+import type { WhiteResult } from "@/stores/use-product-white-store";
+const mocks = vi.hoisted(() => ({ read: vi.fn(), normalize: vi.fn() }));
+vi.mock("antd", () => ({}));
+vi.mock("file-saver", () => ({}));
+vi.mock("@/services/server-config", () => ({ useServerConfigStore: { getState: () => ({ user: null, phase: "ready" }) } }));
+vi.mock("@/services/image-storage", () => ({ imageToDataUrl: mocks.read }));
+vi.mock("@/lib/commerce/background-removal", () => ({}));
+vi.mock("@/lib/commerce/white-image-renderer", () => ({ normalizeWhiteImage: mocks.normalize }));
+vi.mock("@/lib/commerce/pipeline", () => ({}));
+vi.mock("@/services/api/image", () => ({}));
+vi.mock("@/stores/use-config-store", () => ({}));
+vi.mock("@/stores/use-commerce-store", () => ({}));
+vi.mock("@/stores/use-product-white-store", () => ({}));
+vi.mock("@/stores/use-asset-store", () => ({}));
+vi.mock("@/stores/canvas/use-canvas-store", () => ({}));
+vi.mock("@/lib/canvas/canvas-node-factory", () => ({}));
+vi.mock("./product-white-editor", () => ({}));
+import { WhiteSourceAdmission } from "./product-white";
+import { ReferenceReadiness } from "./reference-readiness";
+import { materializeWhiteResult, whiteDraftForResult } from "@/lib/commerce/white-image-result";
+
+const source = (id: string): StoredImageRef => ({ id, name: id + ".png", url: "blob:" + id, storageKey: id, source: "upload" });
+function deferred<T>() {
+    let resolve!: (value: T) => void, reject!: (error: Error) => void;
+    const promise = new Promise<T>((yes, no) => { resolve = yes; reject = no; });
+    return { promise, resolve, reject };
+}
+const flush = async () => { for (let i = 0; i < 12; i++) await Promise.resolve(); };
+beforeEach(() => {
+    vi.resetAllMocks();
+    mocks.read.mockImplementation(async (image: StoredImageRef) => "data:image/png;base64," + image.id);
+});
+describe("white-background source admission", () => {
+    it("rejects delayed account A uploads and invalidates ready snapshots when switching to B", async () => {
+        let account = "A";
+        const gate = new WhiteSourceAdmission(new ReferenceReadiness(), () => account);
+        gate.read("ready", async () => source("ready")); await flush();
+        const old = gate.snapshot()!;
+        const upload = deferred<StoredImageRef>(), commit = vi.fn();
+        gate.read("late A", () => upload.promise, commit);
+        account = "B";
+        expect(old.current()).toBe(false);
+        upload.resolve(source("A")); await flush();
+        expect(commit).not.toHaveBeenCalled(); expect(gate.snapshot()).toBeUndefined();
+        gate.queue.retry(gate.queue.getSnapshot()[0].id); await flush();
+        expect(commit).not.toHaveBeenCalled();
+        gate.read("B", async () => source("B")); await flush();
+        expect(gate.snapshot()?.source.id).toBe("B");
+    });
+    it("blocks a rapid click with an old source until upload AND full image read complete", async () => {
+        const gate = new WhiteSourceAdmission(new ReferenceReadiness());
+        gate.read("old", async () => source("old")); await flush();
+        expect(gate.snapshot()?.source.id).toBe("old");
+        const upload = deferred<StoredImageRef>(), bytes = deferred<string>();
+        mocks.read.mockReturnValueOnce(bytes.promise);
+        gate.read("new", () => upload.promise);
+        expect(gate.snapshot()).toBeUndefined();
+        upload.resolve(source("new")); await flush();
+        expect(gate.snapshot()).toBeUndefined();
+        bytes.resolve("data:image/png;base64,new"); await flush();
+        expect(gate.snapshot()).toMatchObject({ source: source("new"), dataUrl: "data:image/png;base64,new" });
+    });
+    it("retains failed uploads for retry and never falls back to the old image", async () => {
+        const gate = new WhiteSourceAdmission(new ReferenceReadiness());
+        gate.read("old", async () => source("old")); await flush();
+        const upload = vi.fn().mockRejectedValueOnce(new Error("upload failed")).mockResolvedValueOnce(source("new"));
+        gate.read("new", upload); await flush();
+        expect(gate.queue.getSnapshot()[0]).toMatchObject({ status: "failed", error: "upload failed" });
+        expect(gate.snapshot()).toBeUndefined();
+        gate.queue.retry(gate.queue.getSnapshot()[0].id);
+        expect(gate.snapshot()).toBeUndefined(); await flush();
+        expect(gate.snapshot()?.source.id).toBe("new");
+    });
+    it("keeps byte-read failures blocking, and removal does not restore a stale source", async () => {
+        const gate = new WhiteSourceAdmission(new ReferenceReadiness());
+        mocks.read.mockRejectedValueOnce(new Error("read failed"));
+        gate.read("bad", async () => source("bad")); await flush();
+        expect(gate.queue.ready()).toBe(false);
+        gate.queue.remove(gate.queue.getSnapshot()[0].id);
+        expect(gate.snapshot()).toBeUndefined();
+        const pending = deferred<StoredImageRef>(), commit = vi.fn();
+        gate.read("removed", () => pending.promise, commit);
+        gate.queue.remove(gate.queue.getSnapshot()[0].id);
+        pending.resolve(source("removed")); await flush();
+        expect(commit).not.toHaveBeenCalled(); expect(gate.snapshot()).toBeUndefined();
+    });
+    it("uses the last selected file even when previous uploads finish later", async () => {
+        const gate = new WhiteSourceAdmission(new ReferenceReadiness());
+        const first = deferred<StoredImageRef>(), second = deferred<StoredImageRef>();
+        const commit = vi.fn();
+        gate.read("first", () => first.promise, commit);
+        gate.read("second", () => second.promise, commit);
+        second.resolve(source("second")); await flush();
+        first.resolve(source("first")); await flush();
+        expect(gate.snapshot()?.source.id).toBe("second");
+        expect(commit).toHaveBeenCalledExactlyOnceWith(source("second"));
+    });
+    it.each(["SKU switch", "history selection", "page leave"])("invalidates reads and generation checkpoints on %s", async () => {
+        const gate = new WhiteSourceAdmission(new ReferenceReadiness());
+        gate.read("old", async () => source("old")); await flush();
+        const generation = gate.snapshot()!;
+        const pending = deferred<string>(), commit = vi.fn();
+        mocks.read.mockReturnValueOnce(pending.promise);
+        gate.read("upload", async () => source("upload"), commit); await flush();
+        gate.clear();
+        gate.read("sku", async () => source("sku")); await flush();
+        pending.resolve("data:image/png;base64,upload"); await flush();
+        expect(generation.current()).toBe(false);
+        expect(commit).not.toHaveBeenCalled();
+        expect(gate.snapshot()?.source.id).toBe("sku");
+    });
+    it("preserves the generation source through save/reopen and snapshots independent copies", async () => {
+        const gate = new WhiteSourceAdmission(new ReferenceReadiness());
+        const original = source("product");
+        gate.read("product", async () => original); await flush();
+        const request = gate.snapshot()!;
+        original.id = "changed";
+        const image = { url: "result", width: 1024, height: 1024, bytes: 100, mimeType: "image/png" };
+        const record: WhiteResult = { id: "result", source: request.source, image, createdAt: "2026-10-25" };
+        mocks.normalize.mockResolvedValue({ ...image, width: 800, height: 800 });
+        const saved = await materializeWhiteResult(record, { ...whiteDraftForResult(record), output: { size: 800, format: "png" } }, []);
+        expect(saved.source.id).toBe("product");
+        const reopened = JSON.parse(JSON.stringify(saved)) as WhiteResult;
+        gate.read(reopened.source.name, async () => reopened.source); await flush();
+        expect(gate.snapshot()?.source.id).toBe("product");
+        expect(gate.snapshot()?.dataUrl).toBe(request.dataUrl);
+        request.source.id = "mutated snapshot";
+        expect(gate.snapshot()?.source.id).toBe("product");
+    });
+});

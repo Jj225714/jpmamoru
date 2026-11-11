@@ -1,0 +1,782 @@
+[
+  {
+    "id": "DkwlXJaC1hA4G9mKKJYWJ",
+    "category": "地毯地垫类",
+    "order": 1,
+    "title": "客厅场景、不用放人和宠物，每个颜色来一张，注意家…",
+    "prompt": "客厅场景、不用放人和宠物，每个颜色来一张，注意家具和色彩搭配（4个sku都做一张）",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "1u2f3OOW6_u6yR7nk_LiF",
+      "Ox5l9r5LRrKu5bHQSt5c8"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "aecmMQ2iW2aL0enQucBFY",
+    "category": "地毯地垫类",
+    "order": 2,
+    "title": "卧室场景",
+    "prompt": "卧室场景",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "dywuJbVC7blzoc3qBNkZh",
+      "qHFuL17LB8Vwidgqcp-3_"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "f63FfkCyMADNPwsiUpPkr",
+    "category": "地毯地垫类",
+    "order": 3,
+    "title": "餐厅场景",
+    "prompt": "餐厅场景",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "ygi3BnY3k3cNpFRMyYAgs",
+      "P7v3HsFbqOItXIJyoVSVs"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "OXMaZ6h0illNDn_V1uRIZ",
+    "category": "地毯地垫类",
+    "order": 4,
+    "title": "产品特性集合展示，参考图里的布局，左右两部分",
+    "prompt": "产品特性集合展示，参考图里的布局，左右两部分",
+    "chineseCopy": "产品特性\n柔软舒适\n吸水性好\n易清洁\n升级防滑\n不脱线\n风格百搭",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "UZVvTRwEgpOIcstOgbjdk",
+      "93DgkPJ2Dm95GlPBzIecb"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "4u3jKutvKZZ8MJrq-LvPU",
+    "category": "地毯地垫类",
+    "order": 5,
+    "title": "使用地毯前后的对比图，通过搭配展示出使用了地毯后…",
+    "prompt": "使用地毯前后的对比图，通过搭配展示出使用了地毯后的氛围感，家居品质提升",
+    "chineseCopy": "用一张地毯提升你的生活品质\n使用前\n使用后",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "K379h04q0mfHJT2bLOybk"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "Ct9vL8C7ks76T4dk5APJr",
+    "category": "地毯地垫类",
+    "order": 6,
+    "title": "3个尺寸的展示场景对比，标注尺寸.2*3的放上半…",
+    "prompt": "3个尺寸的展示场景对比，标注尺寸.2*3的放上半部分，其他两个尺寸放下面各占一半。标注厚度",
+    "chineseCopy": "厚xxxmm",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [
+      "产品厚度",
+      "产品尺寸"
+    ],
+    "referenceIds": [
+      "WmDx9G1BDIqfBT9fAtSfB",
+      "96QgTKdsIX0dMU5qsB5fd"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "JitVHskmKxiPArFhYZeIc",
+    "category": "地毯地垫类",
+    "order": 7,
+    "title": "细节展示，用地毯作为背景，要看清编织纹理",
+    "prompt": "细节展示，用地毯作为背景，要看清编织纹理",
+    "chineseCopy": "柔软亲肤\n精美包边\n防滑底部",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "JBVwuagmA3eyEXCbxzfwF",
+      "NxMnemdPzsdFoaZZ6o9M9"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "jYwR-8sFZVtO5LSvWDdIY",
+    "category": "地毯地垫类",
+    "order": 8,
+    "title": "清洁方式",
+    "prompt": "清洁方式",
+    "chineseCopy": "易清洁\n吸尘器\n扫地机器人\n布艺清洁剂",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "BZ1Jn7W35w6wldjIkIlC4",
+      "HzHFCQwNz2lU4mXOBXoYG"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "NDz87Tg65JDMyNzyZ0-Hc",
+    "category": "地毯地垫类",
+    "order": 9,
+    "title": "不同光线下的颜色呈现差异",
+    "prompt": "不同光线下的颜色呈现差异。上半部分放场景图",
+    "chineseCopy": "不同光线下，地毯可能会呈现不同颜色\n自然光\n暖光\n冷光\n暗光",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "SZB9-gKPKIVDceyAQm4f_",
+      "Jdf2h2RDDnCYsUCIh65Gq"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "6UTZmLmwhPpaSQeyKfpn8",
+    "category": "地毯地垫类",
+    "order": 10,
+    "title": "体现编织纹理，有个人坐旁边，不用整个人出现，出现…",
+    "prompt": "体现编织纹理，有个人坐旁边，不用整个人出现，出现局部就可以了",
+    "chineseCopy": "十字纹编织，经典不过时",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "QAsJU7kZAvB91vJXBOzxR",
+      "i9E2GuiV0kN7YL_LOx1tx",
+      "gaQQHTO4hrLw-zFg67VL9"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "At7SKvJA2ehfvAaS0R8SG",
+    "category": "地毯地垫类",
+    "order": 11,
+    "title": "四种颜色可选",
+    "prompt": "四种颜色可选",
+    "chineseCopy": "四种颜色可选",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "ov882wSXiWH7tq1SNBp7e",
+      "f2QIXJmEFt96ZJtefveEi",
+      "bVr7KeIqGmWtOPoGzxvqx"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "Y0E1DQ_8MM5s44vzTqSQ_",
+    "category": "桌垫类",
+    "order": 1,
+    "title": "上下结构，不要做成餐桌垫，上把那部分不用放置餐盘…",
+    "prompt": "上下结构，不要做成餐桌垫，上把那部分不用放置餐盘或者食物，试试放一束花点缀。下半部分展示其他不同款式，按各站点的售卖的款式填充。看下是圆形图标还是六边形图标更合适。不用像参考图里的放12个。放10个或者8个就行",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "nyOHPdtEdCRRCmGxKrgXC",
+      "8B9K4wX3iw9dkHN7J-jwQ",
+      "_k7VRZBjJyKNgHwDeEw7F"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "sCwUWXHLkhy5sLXYI8_9b",
+    "category": "桌垫类",
+    "order": 2,
+    "title": "厨房洗手台场景",
+    "prompt": "厨房洗手台场景。用多长时间合适需要测一下，并对应更改",
+    "chineseCopy": "水落下\n1秒后\n3秒后",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [
+      "吸水时间"
+    ],
+    "referenceIds": [
+      "Jcl9OJIcqBql4-iOcaFp5"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "5qpJPFJT6IJbSoAUmu5Ej",
+    "category": "桌垫类",
+    "order": 3,
+    "title": "台面上放置咖啡机的垫子，注意比例",
+    "prompt": "台面上放置咖啡机的垫子，注意比例",
+    "chineseCopy": "",
+    "stage": "usage-size",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "59swcIgxCMHkQK28aCjA0",
+      "MutYff4keYg9SCbk2QovP"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "kBohmop1xAj7RQUAFaVO6",
+    "category": "桌垫类",
+    "order": 4,
+    "title": "体现耐热",
+    "prompt": "体现耐热",
+    "chineseCopy": "可承受高达100度的高温",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [
+      "耐热温度"
+    ],
+    "referenceIds": [
+      "FX_wnOJ9G9rTpf11rbr_O",
+      "W6w9LoL8bAYjnLcP7nwH3"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "oCs_P_lkL1B-zk2EG-xfF",
+    "category": "桌垫类",
+    "order": 5,
+    "title": "不是要做脚垫场景，参考一下文案位置，在桌垫上放入…",
+    "prompt": "不是要做脚垫场景，参考一下文案位置，在桌垫上放入这段文案。吸水时间需要测一下。文案放置的地方需要看花色图案空白处定，可能是最下边，也可能是中间",
+    "chineseCopy": "英文文案照抄，时间测一下改对应时间  \n  XX 秒内吸收\n干燥\n清洁\n舒适",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [
+      "吸水时间"
+    ],
+    "referenceIds": [
+      "jIzu8OdtC_KsbcA5HlHQs",
+      "8jMxVj7Yd4szr456Wbs_1",
+      "vnOZq3VTIaCgPAJ9sVvWD"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "q3flJj3dlU_ZHYzzMAmD0",
+    "category": "桌垫类",
+    "order": 6,
+    "title": "细节展示",
+    "prompt": "细节展示",
+    "chineseCopy": "PU皮革\nXX秒吸水\n坚固的边缘工艺\n厚度XXXmm",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [
+      "吸水时间",
+      "产品厚度"
+    ],
+    "referenceIds": [
+      "SLNiUxYyPksvAs9U7yB_f",
+      "UcGN7VtsoYR27KK-Nu6a3"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "dEEjgna2UZl5GZjDOXpRZ",
+    "category": "桌垫类",
+    "order": 7,
+    "title": "参考布局排版",
+    "prompt": "参考布局排版",
+    "chineseCopy": "PU皮革\nPU皮革更环保耐用耐磨\n\n儿童友好型设计\n材质柔软与圆角设计保护儿童避免被划伤\n\n多款风格设计\n经典款与流行款，为您的生活增添精致点缀",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "1ND41KQBIRMF811IlIzYn",
+      "AmCr9obwxC9wnQGNaNm91"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "6WpTKshZAH3BHJIQ1-QZ0",
+    "category": "桌垫类",
+    "order": 8,
+    "title": "材料细节展示",
+    "prompt": "材料细节展示",
+    "chineseCopy": "体验三层舒适\n\n表面PU皮革材质\nPVC填充层\n防滑底部",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "g0Eq057s9lHDQiPqKQGWl",
+      "aMhzc-m9yAGowJgxbMmNQ"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "A9iT8NvWaPtIUyR3iNzy4",
+    "category": "桌垫类",
+    "order": 9,
+    "title": "场景展示，不要放宠物的场景",
+    "prompt": "场景展示，不要放宠物的场景。",
+    "chineseCopy": "满足多种场合使用\n厨房\n餐桌台\n洗漱台\n工作台",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "Lw7CHf2m3BmyjmOjV5Bc4",
+      "PFVnHHU3r6HGdlAI4s_5o"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "2NdCAAiibdk4CIeu4DCXQ",
+    "category": "桌垫类",
+    "order": 10,
+    "title": "对比图，别人的用久了底部会脱落黏在桌子台面上，而…",
+    "prompt": "对比图，别人的用久了底部会脱落黏在桌子台面上，而我们的不会",
+    "chineseCopy": "别人的：底部容易粘在桌上\n有异味\n难以清洁\n吸水缓慢\n我们的：经久耐用\n无异味\n易清洁\nXX秒瞬吸",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [
+      "吸水时间"
+    ],
+    "referenceIds": [
+      "081MGbKwmbWKbCBcUiPz5"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "Kyx5nvRtFiPflSQHOjBtf",
+    "category": "桌垫类",
+    "order": 11,
+    "title": "无",
+    "prompt": "无",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "0HzaF-9Qs1zoC_e-WeQgz",
+      "Y0U4EOhEXV_jHvqGcy1rp"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "FYfcFDddGPrkQj0pDWdLr",
+    "category": "洞洞板类",
+    "order": 1,
+    "title": "如右图一高一矮一黑一白的风格，白色桌子，类似图一…",
+    "prompt": "如右图一高一矮一黑一白的风格，白色桌子，类似图一的背景，不要道具。\n板子和配件按相同颜色搭配，不混搭。\n用夹式支架，配件参考右图数量和摆放。\n\n给一张无文字版本的。\n\n视角：如右图。",
+    "chineseCopy": "免打孔洞洞板\n多种配件可选\n\n两色可选",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "_H_KvghuxpvVKavmTkYPb",
+      "S0yYYtcVC7-xHGlRo0rml"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "drD8HwkmXmIeEXsEWAIer",
+    "category": "洞洞板类",
+    "order": 2,
+    "title": "书桌，灯光的效果",
+    "prompt": "书桌，灯光的效果。\n2块白色30*45cm板子。\n立式支架。\n\n视角：如右图。",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "_dI80IB_cDFILhXmjlWNO",
+      "sV1XKz_XB78QL7ihFCZ0C",
+      "FW6QCUXW1R8SF1Co_Lnpi",
+      "sXDoc_2caAXsYwgsKl9aO"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "Hgq_RgNv7BzIPfPmyGWkZ",
+    "category": "洞洞板类",
+    "order": 3,
+    "title": "直接参考右图，要一样的背景和类似的道具摆件",
+    "prompt": "直接参考右图，要一样的背景和类似的道具摆件。\n换成2块白色30*45cm的板子。\n\n视角：如右图",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "ziLmDcLny79LFJe3hpwcL",
+      "EYXCWIcFfiBqm1maORSTO"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "t1bjRtupHJgnAoRN6TKhK",
+    "category": "洞洞板类",
+    "order": 4,
+    "title": "多场景图",
+    "prompt": "多场景图",
+    "chineseCopy": "多种场景应用\n集收纳与装饰于一体，适用于多种场景\n\n书桌，玄关，客厅，电竞房",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "6qPL3W0uBeTplY36JBzfu",
+      "rf_FzVRG4psQPVxSgkXoN"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "XwEup2zFXTar3Ei2IUisd",
+    "category": "洞洞板类",
+    "order": 5,
+    "title": "展示三种安装方式",
+    "prompt": "展示三种安装方式",
+    "chineseCopy": "3种固定方式可选\n（立式底座/夹式底座/无痕贴）",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "Z6UW2lgjDYAjP65SllnVJ",
+      "dm9TYUgOUI1iIe2G5ouix"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "wjuXKfhQQ13CJ1TmQABz0",
+    "category": "洞洞板类",
+    "order": 6,
+    "title": "注意事项",
+    "prompt": "注意事项",
+    "chineseCopy": "本产品配件仅适用于本店销售的孔位直径约6mm、孔间距约3cm的圆孔洞洞板，其他类型的洞洞板均无法适配。\n\n孔距：3cm\n孔径：6mm\n\n其他洞洞板不可使用。",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [
+      "产品尺寸"
+    ],
+    "referenceIds": [
+      "ZX31CThCqkJBd3fl-L_Qk",
+      "jsKfMnvUOkypjGMpHGcWo"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "SpEQrEb_izwSFwm-W3R0m",
+    "category": "洞洞板类",
+    "order": 7,
+    "title": "安装步骤",
+    "prompt": "安装步骤",
+    "chineseCopy": "桌夹安装指南\n1. 取出全部配件\n2拧紧螺丝，固定夹脚支架\n3.将大螺丝装入立式支架\n4组装完成\n5.用小螺丝把立式支架固定到洞洞板上\n6.夹持在桌边，锁紧大螺丝\n7.成品展示",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "mlKQCDFAGuP4cJXKV8dFJ"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "r-GQjGqYmhQziy08zTPNi",
+    "category": "洞洞板类",
+    "order": 8,
+    "title": "1.这款洞洞板适用于其他品牌吗？",
+    "prompt": "1.这款洞洞板适用于其他品牌吗？\n（配件仅适用于本店铺内的圆孔类型洞洞板）\n2.这款洞洞板需要打孔吗？\n（无需打孔，安装方式为桌面支架和无痕贴）\n3.什么情况下需要购买连接件？\n（多块洞洞板可选择连接件牢固安装，墙面安装无需使用连接件。）\n4.商品有缺陷、未收到完整物品或我不会安装怎么办？\n（如商品有缺陷或使用中遇到问题,请立即联系店铺，工作人员将尽快为您解决）",
+    "chineseCopy": "1.这款洞洞板适用于其他品牌吗？\n（配件仅适用于本店铺内的圆孔类型洞洞板）\n2.这款洞洞板需要打孔吗？\n（无需打孔，安装方式为桌面支架和无痕贴）\n3.什么情况下需要购买连接件？\n（多块洞洞板可选择连接件牢固安装，墙面安装无需使用连接件。）\n4.商品有缺陷、未收到完整物品或我不会安装怎么办？\n（如商品有缺陷或使用中遇到问题,请立即联系店铺，工作人员将尽快为您解决）",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "fAlVETnULv3yWOlWHSooG",
+      "bSLWM3HPq_Ko2sHReQlbt",
+      "UvdVtSn0033UqbIBPVaK0"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "Ndv79OSORpmmbCt3xnE4L",
+    "category": "洞洞板类",
+    "order": 9,
+    "title": "想要一个白色少女风格的主图，或者两张",
+    "prompt": "想要一个白色少女风格的主图，或者两张。这种看着比较洁白且比较少女或者比较实用的。\n桌子最好是白色的，墙壁也是白色。",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "uak7OVeiaktJMnXd2RgJV"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "492XazH07jMs9oScTrxkr",
+    "category": "收纳筐类",
+    "order": 1,
+    "title": "客厅场景，融合绿色植物作为背景，呈现天然的感觉，…",
+    "prompt": "客厅场景，融合绿色植物作为背景，呈现天然的感觉，放两个。一个盖子打开，另一个盖子合上",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "EWuc611juiX-XuwBPGWOu",
+      "fMJK_TTHVL1lXgo7tOxi1",
+      "e4Fs6QUIUgaiQ-tIGjEjs"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "CcTx4PqjwOj1ztRcW_BYZ",
+    "category": "收纳筐类",
+    "order": 2,
+    "title": "放置在衣橱使用",
+    "prompt": "放置在衣橱使用",
+    "chineseCopy": "",
+    "stage": "usage-size",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "v1EOTPjWSG5D6r3W1_l08",
+      "deQ6tTI2_IMF5AUgNwwJt"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "nkvypzlL7C2NvUCszXNRQ",
+    "category": "收纳筐类",
+    "order": 3,
+    "title": "展示可以收纳什么东西",
+    "prompt": "展示可以收纳什么东西",
+    "chineseCopy": "化妆品、毛巾、玩具、衣服、零食",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "OUxaqCZR-P9Hesl9rhoEX"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "DUDlLC0Qw1y_TWRZPrpqb",
+    "category": "收纳筐类",
+    "order": 4,
+    "title": "文案用里面的",
+    "prompt": "文案用里面的",
+    "chineseCopy": "",
+    "stage": "scene",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "sz65-QMIK5ZIuN9pfpNfz",
+      "w-4azaMgDEcxEW6oR39BJ"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "_1_vVhbYXdGfiF_Dqjnlx",
+    "category": "收纳筐类",
+    "order": 5,
+    "title": "细节展示，体现圆润不会割伤、坚固、编织线密集、手…",
+    "prompt": "细节展示，体现圆润不会割伤、坚固、编织线密集、手工织造",
+    "chineseCopy": "提手圆润光滑\n坚固耐用\n紧密编织\n手工编织",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "NhIn5eWec6KSLCy8vsw0f",
+      "CnUbogDGA8JdDT2vkdL5B"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "ACpuqMKXmFnC9iFwoVaui",
+    "category": "收纳筐类",
+    "order": 6,
+    "title": "使用前后对比",
+    "prompt": "使用前后对比",
+    "chineseCopy": "前/后",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "lRZl35WYk4q8zK_j--mVc",
+      "5NS9Cg0_w41Ags7IyIS-G"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "S6iub8KD3B2B0OF1e_8p7",
+    "category": "收纳筐类",
+    "order": 7,
+    "title": "同行对比",
+    "prompt": "同行对比",
+    "chineseCopy": "别人的：普通塑料，不抗压，易变形不耐用\n我们的：优质PP材质，坚固、保持形状经久耐用",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "jFjoE1dqNCy0wKYM0mLn0",
+      "q3xltiuowACGNRen2vDUd"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "Ua9AOT11eBm7LUqILZ9PP",
+    "category": "收纳筐类",
+    "order": 8,
+    "title": "三种花色设计",
+    "prompt": "三种花色设计",
+    "chineseCopy": "手工编织",
+    "stage": "marketing",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [],
+    "referenceIds": [
+      "IArxmP_sCE96-IVdF1JA7",
+      "AackxtxH5kfoCO2vMOc5H"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  },
+  {
+    "id": "UHOcDa9IvC8XjFpdV3xdd",
+    "category": "收纳筐类",
+    "order": 9,
+    "title": "照抄，尺寸用 M、L、XL、XXL",
+    "prompt": "照抄，尺寸用 M、L、XL、XXL",
+    "chineseCopy": "",
+    "stage": "usage-size",
+    "layout": "feature-grid",
+    "defaultCount": 1,
+    "enabledByDefault": true,
+    "requiredFacts": [
+      "产品尺寸"
+    ],
+    "referenceIds": [
+      "ondG0DaDe0Q-XsCPFC3av",
+      "T7qhvBc5h4IKMgjKJZL8u"
+    ],
+    "variantScope": "per-sku",
+    "needsReview": false
+  }
+]

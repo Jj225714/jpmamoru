@@ -1,0 +1,103 @@
+import assert from 'node:assert/strict';
+import {resolve} from 'node:path';
+import {mkdir} from 'node:fs/promises';
+import {createServer} from 'vite';
+import react from '@vitejs/plugin-react';
+import {chromium} from 'playwright';
+const root=process.cwd();let vite,browser;
+const entry=`
+import localforage from 'localforage';window.readGenerationLogs=async()=>{const rows=[];await localforage.createInstance({name:'infinite-canvas',storeName:'image_generation_logs'}).iterate(v=>{rows.push(v);});return rows;};
+import React from 'react';import {createRoot} from 'react-dom/client';import {App} from 'antd';import {MemoryRouter,useNavigate,useLocation} from 'react-router-dom';import {QueryClient,QueryClientProvider} from '@tanstack/react-query';
+import ImagePage from '/src/pages/image/index.tsx';import {useConfigStore,defaultConfig} from '/src/stores/use-config-store.ts';import {useServerConfigStore} from '/src/services/server-config.ts';import '/src/styles/globals.css';
+window.__RUNTIME_CONFIG__={gptImageJobsEnabled:false,serverConfigEnabled:false};
+useConfigStore.setState({config:{...defaultConfig,quality:'low',size:'auto',count:'1',textModel:'test::vision',channels:[{id:'test',name:'Test',provider:'general',apiFormat:'openai',apiKey:'TEST_ONLY',baseUrl:'https://example.test/v1',models:[{name:'vision',capability:'text',supportsImageInput:true}]}]}});
+window.configRefresh=()=>{const config=useConfigStore.getState().config;useConfigStore.setState({config:{...config,channels:config.channels.map(c=>({...c,name:c.name+' refreshed'}))}});};
+window.clearTextModel=()=>{const config=useConfigStore.getState().config;useConfigStore.setState({config:{...config,textModel:''}});};
+window.disableVision=()=>{const config=useConfigStore.getState().config;useConfigStore.setState({config:{...config,channels:config.channels.map(c=>({...c,models:c.models.map(m=>({...m,supportsImageInput:false}))}))}});};
+window.phaseRefresh=()=>{useServerConfigStore.setState({phase:'checking'});setTimeout(()=>useServerConfigStore.setState({phase:'ready'}),50);};
+window.setAccount=id=>useServerConfigStore.setState({user:id?{id}:null,phase:id?'ready':'signed-out'});
+function TestPage(){window.navigate=useNavigate();window.currentPath=useLocation().search;return React.createElement(ImagePage);}
+createRoot(document.getElementById('root')).render(React.createElement(React.StrictMode,null,React.createElement(QueryClientProvider,{client:new QueryClient()},React.createElement(MemoryRouter,{initialEntries:['/image']},React.createElement(App,null,React.createElement(TestPage))))));
+`;
+try{
+ vite=await createServer({configFile:false,root,cacheDir:resolve(root,'test-results/reverse-prompt/vite-cache'),resolve:{alias:{'@':resolve(root,'src')}},server:{host:'127.0.0.1',port:0,hmr:false,watch:null},plugins:[react(),{name:'image-safety-fixture',resolveId(id){if(id==='virtual:image-safety')return '\0image-safety.tsx';},load(id){if(id==='\0image-safety.tsx')return entry;},configureServer(server){server.middlewares.use(async(req,res,next)=>{if(req.url!=='/image')return next();res.setHeader('Content-Type','text/html');res.end(await server.transformIndexHtml('/image','<div id="root" style="height:100vh"></div><script type="module" src="/@id/virtual:image-safety"></script>'));});}}]});
+
+ await vite.listen();browser=await chromium.launch({headless:true});const page=await browser.newPage({viewport:{width:1440,height:1000}});page.setDefaultTimeout(20000);
+ await page.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());
+ await page.goto(`http://127.0.0.1:${vite.httpServer.address().port}/image`,{waitUntil:'domcontentloaded',timeout:180000});
+
+ const panel=page.locator('section[aria-label="反推提示词"]');
+ const prompt=page.locator('textarea').first();
+ const result=page.getByRole('textbox',{name:'可编辑的反推结果'});
+ const png=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=8;c.height=8;return c.toDataURL().split(',')[1];});
+ const file={name:'reverse.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')};
+ let submits=0, delay=false, release, lastImage;
+ await page.route('**/responses',async route=>{
+   submits++; const body=route.request().postDataJSON();assert.equal(body.model,'vision'); lastImage=body.input.flatMap(m=>m.content||[]).find(c=>c.type==='input_image')?.image_url;
+   if(delay)await new Promise(r=>release=r);
+   const text=JSON.stringify(body).includes('只输出提示词正文')?'主体居中，柔和侧光，浅色背景':'{"name":"收纳盒","audience":"家庭收纳用户","sellingPoints":"带盖结构","material":"表面光滑","usage":"收纳物品","category":"Home > Storage"}';
+   try{await route.fulfill({status:200,contentType:'text/event-stream',body:'data: '+JSON.stringify({type:'response.output_text.delta',delta:text})+'\n\ndata: [DONE]\n\n'});}catch{}
+ });
+ await prompt.fill('原来的提示词');
+ await page.locator('#root').getByRole('button',{name:'反推提示词',exact:true}).click();
+ await panel.locator('input[type=file]').setInputFiles(file);
+ await panel.getByAltText('反推图片预览').waitFor();
+ assert.equal(submits,0);assert.equal(await page.locator('[data-reference-id]').count(),0);
+ await panel.getByRole('button',{name:/反推提示词/}).click();
+ await page.waitForFunction(()=>document.querySelector('[aria-label="可编辑的反推结果"]').value.includes('主体居中'));
+ await result.fill('编辑后的反推提示词');
+ await panel.getByRole('button',{name:'填入提示词'}).click();
+ await page.getByRole('button',{name:/取\s*消/}).click();assert.equal(await prompt.inputValue(),'原来的提示词');
+ await panel.getByRole('button',{name:'填入提示词'}).click();await page.getByRole('button',{name:'确认覆盖'}).click();
+ await page.getByText('覆盖现有提示词？',{exact:true}).first().waitFor({state:'hidden'}); assert.equal(await prompt.inputValue(),'编辑后的反推提示词');assert.equal(await page.locator('[data-reference-id]').count(),0);
+ console.log('PASS independent upload, explicit request, editable output, cancel/confirm replacement, zero reference pollution');
+ delay=true;
+ await panel.getByRole('button',{name:/反推提示词/}).click();await page.waitForTimeout(250);
+ await page.evaluate(()=>window.configRefresh());release();
+ await page.waitForTimeout(250);assert.equal(await result.inputValue(),'');
+ delay=false;
+ await panel.getByRole('button',{name:/反推提示词/}).click();
+ await page.waitForFunction(()=>document.querySelector('[aria-label="可编辑的反推结果"]').value.includes('主体居中'));
+ delay=true;
+ await panel.getByRole('button',{name:/反推提示词/}).click();await page.waitForTimeout(250);
+ await panel.locator('input[type=file]').setInputFiles({...file,name:'replacement.png'});release();
+ await page.waitForTimeout(250);assert.equal(await result.inputValue(),'');
+ await panel.getByRole('button',{name:/反推提示词/}).click();await page.waitForTimeout(250);
+ await page.evaluate(()=>{window.setAccount('B');window.setAccount('A');});release();await page.waitForTimeout(250);
+ await page.locator('#root').getByRole('button',{name:'反推提示词',exact:true}).click(); assert.equal(await result.inputValue(),'');assert.equal(await panel.getByAltText('反推图片预览').count(),0);
+ await page.getByRole('button',{name:'Close',exact:true}).click();
+ console.log('PASS config change, replacement image and account ABA suppress late responses');
+ delay=false;
+ await page.locator('input[type=file][multiple]').setInputFiles({...file,name:'product.png'});
+ await page.waitForFunction(()=>document.querySelector('textarea').value.includes('收纳盒'));
+ assert.equal(await page.locator('[data-reference-id]').count(),1);
+ console.log('PASS existing six-field product auto-fill still works');
+
+ await page.locator('#root').getByRole('button',{name:'反推提示词',exact:true}).click();
+ const large=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=2048;c.height=2048;const ctx=c.getContext('2d'),d=ctx.createImageData(2048,2048);let n=42;for(let i=0;i<d.data.length;i+=4){n=(Math.imul(n,1664525)+1013904223)>>>0;d.data[i]=n&255;d.data[i+1]=(n>>>8)&255;d.data[i+2]=(n>>>16)&255;d.data[i+3]=255;}ctx.putImageData(d,0,0);return c.toDataURL().split(',')[1];});
+ assert.ok(Buffer.from(large,'base64').length>1_500_000);
+ await panel.locator('input[type=file]').setInputFiles({name:'large.png',mimeType:'image/png',buffer:Buffer.from(large,'base64')});
+ await panel.getByAltText('反推图片预览').waitFor();
+ await panel.getByRole('button',{name:/反推提示词/}).click();
+ await page.waitForFunction(()=>document.querySelector('[aria-label="可编辑的反推结果"]').value.includes('主体居中'));
+ assert.ok(lastImage.length*0.75<=1_500_000);
+ const dimensions=await page.evaluate(async src=>{const i=new Image();i.src=src;await i.decode();return [i.naturalWidth,i.naturalHeight];},lastImage);
+ assert.ok(Math.max(...dimensions)<=1600);
+ await mkdir('test-results/reverse-prompt',{recursive:true});await page.screenshot({path:'test-results/reverse-prompt/dialog.png'});
+ delay=true;
+ await panel.getByRole('button',{name:/反推提示词/}).click();await page.waitForTimeout(350);
+ await page.getByRole('button',{name:'Close',exact:true}).click();release();
+ await page.locator('#root').getByRole('button',{name:'反推提示词',exact:true}).click();assert.equal(await result.inputValue(),'');
+ await panel.locator('input[type=file]').setInputFiles(file);
+ await panel.getByRole('button',{name:/反推提示词/}).click();await page.waitForTimeout(300);
+ await page.evaluate(()=>window.dispatchEvent(new PageTransitionEvent('pagehide')));release();await page.waitForTimeout(150);assert.equal(await result.inputValue(),'');
+ await page.evaluate(()=>window.disableVision());
+ await panel.getByText('当前文本模型不支持图片输入，请选择支持识图的文本模型。',{exact:true}).waitFor();
+ assert.equal(await panel.getByRole('button',{name:/反推提示词/}).isDisabled(),true);
+ const beforeUnavailable=submits; await page.evaluate(()=>window.clearTextModel());
+ await panel.getByText('请先配置支持图片输入的文本模型；如无配置权限，请联系管理员。',{exact:true}).waitFor();
+ assert.equal(await panel.getByRole('button',{name:/反推提示词/}).isDisabled(),true);assert.equal(submits,beforeUnavailable);
+ await page.getByRole('button',{name:'Close',exact:true}).click();
+ console.log('PASS large image compressed to <=1600px / 1.5MB, closing/pagehide cancel, unsupported/unconfigured models are blocked without submission');
+ await mkdir('test-results/reverse-prompt',{recursive:true});await page.screenshot({path:'test-results/reverse-prompt/completed.png',fullPage:true});
+}catch(error){const p=browser?.contexts()[0]?.pages()[0]; if(p){await mkdir('test-results/reverse-prompt',{recursive:true});await p.screenshot({path:'test-results/reverse-prompt/error.png'});console.log(await p.locator('body').innerText());}throw error;}finally{await browser?.close();await vite?.close();}

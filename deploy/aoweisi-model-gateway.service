@@ -1,0 +1,33 @@
+[Unit]
+Description=Aoweisi managed model gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aoweisi-model-gateway
+Group=aoweisi-model-gateway
+WorkingDirectory=/opt/aoweisi-model-gateway/current
+EnvironmentFile=-/etc/aoweisi-model-gateway/editor.env
+ExecStart=/usr/bin/python3 /opt/aoweisi-model-gateway/current/server.py --config /etc/aoweisi-model-gateway/config.json
+Restart=on-failure
+RestartSec=3
+UMask=0077
+MemoryMax=1536M
+TasksMax=64
+LimitNOFILE=512
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+ReadWritePaths=/var/lib/aoweisi-model-gateway /var/lib/aoweisi-public-rules
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

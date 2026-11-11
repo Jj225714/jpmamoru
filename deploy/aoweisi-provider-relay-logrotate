@@ -1,0 +1,10 @@
+/var/log/aoweisi/provider-relay.jsonl {
+    daily
+    rotate 14
+    size 50M
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0640 aoweisi-model-gateway adm
+}

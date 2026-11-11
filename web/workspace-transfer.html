@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="referrer" content="no-referrer" />
+        <title>工作区迁移</title>
+    </head>
+    <body>
+        <main>
+            <h1>工作区迁移</h1>
+            <p>完整保留原本地数据。仅向空白工作区恢复。</p>
+            <p id="status" role="status">正在检查…</p>
+            <button id="retry" hidden>重试</button>
+            <hr />
+            <button id="export">导出当前工作区</button><label> 导入归档 <input id="import" type="file" accept=".zip" /></label>
+            <p><a href="/commerce/settings">返回设置</a></p>
+        </main>
+        <script type="module" src="/src/workspace-transfer-page.ts"></script>
+    </body>
+</html>

@@ -1,0 +1,85 @@
+import assert from 'node:assert/strict';
+import { spawn } from 'node:child_process';
+import { resolve } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import { createServer } from 'vite';
+import react from '@vitejs/plugin-react';
+import { chromium } from 'playwright';
+const root=process.cwd();
+let vite,worker,browser;
+const entry=`
+import React from 'react';import {createRoot} from 'react-dom/client';import {App} from 'antd';import {MemoryRouter} from 'react-router-dom';import {QueryClient,QueryClientProvider} from '@tanstack/react-query';
+import ImagePage from '/src/pages/image/index.tsx';import {useConfigStore,defaultConfig} from '/src/stores/use-config-store.ts';import {useServerConfigStore} from '/src/services/server-config.ts';import '/src/styles/globals.css';
+window.__RUNTIME_CONFIG__={gptImageJobsEnabled:true,serverConfigEnabled:true};
+window.switchAccount=async(name)=>{useServerConfigStore.setState({phase:'checking'});const r=await fetch('/api/config-vault/login',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:name+'@test.invalid',password:'local-test-only'})});if(!r.ok)throw Error('login');useServerConfigStore.setState({user:(await r.json()).user,phase:'ready'});};
+window.aba=()=>{const user=useServerConfigStore.getState().user;useServerConfigStore.setState({user:{id:202}});useServerConfigStore.setState({user});};
+const session=await fetch('/api/config-vault/session');if(session.ok)useServerConfigStore.setState({user:(await session.json()).user,phase:'ready'});else await window.switchAccount('alice');
+useConfigStore.setState({config:{...defaultConfig,quality:'low',size:'1:1',count:'1',channels:[{...defaultConfig.channels[0],apiKey:'LOCAL_SHARED_TEAM_KEY',baseUrl:'https://llm.zhitouzhuan.com/v1'}]}});
+createRoot(document.getElementById('root')).render(React.createElement(React.StrictMode,null,React.createElement(QueryClientProvider,{client:new QueryClient()},React.createElement(MemoryRouter,{initialEntries:['/image']},React.createElement(App,null,React.createElement(ImagePage))))));
+`;
+try{
+ vite=await createServer({configFile:false,root,resolve:{alias:{'@':resolve(root,'src')}},server:{host:'127.0.0.1',port:0,hmr:false,watch:null},plugins:[react(),{name:'image-safety-fixture',resolveId(id){if(id==='virtual:image-safety')return '\0image-safety.tsx';},load(id){if(id==='\0image-safety.tsx')return entry;},configureServer(server){server.middlewares.use(async(req,res,next)=>{if(req.url!=='/image')return next();res.setHeader('Content-Type','text/html');res.end(await server.transformIndexHtml('/image','<div id="root" style="height:100vh"></div><script type="module" src="/@id/virtual:image-safety"></script>'));});}}]});
+ await vite.listen();
+ worker=spawn(process.execPath,['../provider-relay/local-account-harness.mjs'],{cwd:root,env:{...process.env,TASK_TEST_WEB_URL:`http://127.0.0.1:${vite.httpServer.address().port}`,TASK_TEST_HTTPS_PORT:'0',TASK_TEST_DELAY_MS:'1800'},stdio:['pipe','pipe','pipe']});
+ const origin=await new Promise((yes,no)=>{let out='';worker.stdout.on('data',chunk=>{out+=chunk;for(const line of out.split('\n')){try{const row=JSON.parse(line);if(row.event==='trusted-task-harness-ready')yes(row.origin);}catch{}}});worker.stderr.on('data',chunk=>process.stderr.write(chunk));worker.on('exit',code=>no(Error('harness exit '+code)));});
+ browser=await chromium.launch({headless:true});
+ const context=await browser.newContext({ignoreHTTPSErrors:true,viewport:{width:1440,height:1100}}), page=await context.newPage();page.setDefaultTimeout(45000);
+ page.on('pageerror',e=>console.error('PAGE',e.message));
+ const requests=[];page.on('request',r=>{if(r.url().includes('/api/providers/gpt/jobs'))requests.push({method:r.method(),url:r.url(),body:r.postData()});});
+ await page.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
+ const health=()=>page.evaluate(async()=>await(await fetch('/__task_test/health')).json());
+ const generate=async text=>{await page.locator('textarea').first().fill(text);await page.getByRole('button',{name:/^开始生成$/}).click();};
+ await page.goto(origin+'/image');await page.locator('textarea').first().waitFor();
+
+ await generate('generation A');
+ await page.getByRole('button',{name:'查询原任务',exact:true}).waitFor();
+ const before=await health();assert.equal(before.gptSubmits,1);
+ await page.reload();await page.getByRole('button',{name:'查询原任务',exact:true}).waitFor();await page.getByRole('button',{name:'查询原任务',exact:true}).click();
+ await page.waitForFunction(()=>document.body.textContent.includes('succeeded'));
+ assert.equal((await health()).gptSubmits,1);
+ await mkdir('test-results/image-job-safety',{recursive:true});await page.screenshot({path:'test-results/image-job-safety/recovered.png'});
+ console.log('PASS generation refresh recovery no POST');
+ await page.getByRole('button',{name:'分层编辑',exact:true}).waitFor();
+ await page.locator('textarea').first().fill('edit A');
+ const png=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=16;c.height=16;c.getContext('2d').fillRect(0,0,16,16);return c.toDataURL().split(',')[1];});
+ await page.locator('input[type=file]').first().setInputFiles({name:'ref.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});
+ await page.locator('img[alt="ref.png"]').waitFor();
+ await generate('edit A');
+ await page.waitForFunction(()=>document.querySelectorAll('[aria-label="本地任务恢复"] button').length===2);
+ await page.getByRole('button',{name:'分层编辑',exact:true}).waitFor();
+ assert(requests.some(r=>r.method==='POST'&&JSON.parse(r.body).operation==='edits'));
+ assert.equal((await health()).gptSubmits,2);
+ const jobA=await page.evaluate(async()=>{const r=await fetch('/api/providers/gpt/jobs',{headers:{Authorization:'Bearer LOCAL_SHARED_TEAM_KEY','X-Task-User':'101'}});return (await r.json()).items[0].job_id;});
+ await page.evaluate(()=>window.switchAccount('bob'));
+ await page.waitForFunction(()=>!document.querySelector('[aria-label="本地任务恢复"]'));
+ assert.equal(await page.getByRole('button',{name:'分层编辑',exact:true}).count(),0);
+ assert.equal(await page.getByText('edit A',{exact:true}).count(),0);
+ const denied=await page.evaluate(async id=>{const r=await fetch('/api/providers/gpt/jobs/'+id,{headers:{Authorization:'Bearer LOCAL_SHARED_TEAM_KEY','X-Task-User':'202'}});return r.status;},jobA);assert.equal(denied,404);
+ await generate('B own generation');await page.getByRole('button',{name:'查询原任务',exact:true}).waitFor();
+ await page.getByRole('button',{name:'分层编辑',exact:true}).waitFor();assert.equal((await health()).gptSubmits,3);
+ await page.evaluate(()=>window.switchAccount('alice'));
+ await page.getByRole('region',{name:'本地任务恢复'}).getByText(/edit A/).waitFor();
+ assert.equal(await page.getByText(/B own generation/).count(),0);
+ await generate('ABA pending');await page.getByRole('region',{name:'本地任务恢复'}).getByText(/ABA pending/).waitFor();
+ await page.evaluate(()=>window.aba());
+ await page.waitForTimeout(2300);
+ assert.equal(await page.getByRole('button',{name:'分层编辑',exact:true}).count(),0);
+ assert.equal((await health()).gptSubmits,4);
+ // Lose the create acknowledgement after the real relay accepted it, then reload before helper retry.
+ let accepted;const acknowledgement=new Promise(resolve=>{accepted=resolve;});
+ await page.route('**/api/providers/gpt/jobs',async route=>{if(route.request().method()!=='POST')return route.continue();await route.fetch();await route.abort('failed');accepted();});
+ await generate('lost acknowledgement');await acknowledgement;await page.reload();
+ await page.getByRole('region',{name:'本地任务恢复'}).locator('div').filter({hasText:'lost acknowledgement'}).getByRole('status').waitFor();
+ const count=(await health()).gptSubmits;assert.equal(count,5);
+ await page.waitForTimeout(2200);assert.equal((await health()).gptSubmits,count);
+ await page.unroute('**/api/providers/gpt/jobs');
+ await page.screenshot({path:'test-results/image-job-safety/lost-acknowledgement.png'});
+ // A separate B browser has its own cookies but the same channel key.
+ const other=await browser.newContext({ignoreHTTPSErrors:true});const b=await other.newPage();
+ await b.goto(origin+'/image');await b.locator('textarea').first().waitFor();await b.evaluate(()=>window.switchAccount('bob'));
+ const bList=await b.evaluate(async()=>{const r=await fetch('/api/providers/gpt/jobs',{headers:{Authorization:'Bearer LOCAL_SHARED_TEAM_KEY','X-Task-User':'202'}});return await r.json();});
+ assert.equal(bList.items.length,1);assert.notEqual(bList.items[0].job_id,jobA);
+ assert.equal((await health()).upstreamCookies,0);
+ console.log('PASS actual /image generation + edit + refresh GET-only recovery + A/B shared-key + A→B→A discard + lost acknowledgement reload no POST; upstream submissions=5; browser jobs requests='+requests.length);
+}finally{await browser?.close();if(worker&&!worker.killed)worker.kill();await vite?.close();}
+

@@ -1,0 +1,35 @@
+[Unit]
+Description=Aoweisi caller-configured image provider relay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aoweisi-model-gateway
+Group=aoweisi-model-gateway
+WorkingDirectory=/opt/aoweisi-provider-relay/current
+ExecStart=/usr/bin/node /opt/aoweisi-provider-relay/current/server.mjs --origin https://103.79.187.126
+Environment=AOWEISI_DIAGNOSTICS_LOG=/var/log/aoweisi/provider-relay.jsonl
+Environment=AOWEISI_JOB_STORE=/var/lib/aoweisi-provider-relay/provider-relay/jobs.json
+Environment=GPT_IMAGE_UPSTREAM_BASE_URL=http://127.0.0.1:8080/v1
+Environment=JOB_AUTH_SESSION_URL=http://127.0.0.1:3183/api/config-vault/session
+Environment=JOB_AUTH_COOKIE_NAME=__Secure-provider_tasks
+StateDirectory=aoweisi-provider-relay
+StateDirectoryMode=0750
+ExecStartPre=/usr/bin/install -d -m 0750 /var/lib/aoweisi-provider-relay/provider-relay
+ExecStartPre=/usr/bin/test ! -d /var/lib/aoweisi-provider-relay/provider-relay/jobs.json
+UMask=0077
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/var/log/aoweisi
+ProtectHome=true
+MemoryMax=768M
+TasksMax=64
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target

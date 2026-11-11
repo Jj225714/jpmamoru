@@ -1,0 +1,47 @@
+export type EditImage = { url: string; storageKey?: string; width: number; height: number; bytes?: number; mimeType?: string };
+export type EditLayer = {
+    id: string;
+    name: string;
+    kind: "image" | "text";
+    role?: "background" | "source" | "product";
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rotation: number;
+    opacity: number;
+    visible: boolean;
+    locked: boolean;
+    groupId?: string;
+    image?: EditImage;
+    maskBase?: EditImage;
+    text?: string;
+    color?: string;
+    fontFamily?: string;
+    fontSize?: number;
+    bold?: boolean;
+    align?: "left" | "center" | "right";
+};
+export type ImageEditDocument = {
+    version: 1;
+    id: string;
+    sourceId: string;
+    title: string;
+    revision: number;
+    updatedAt: number;
+    width: number;
+    height: number;
+    background: string;
+    original: EditImage;
+    layers: EditLayer[];
+};
+export type EditOperation = "erase" | "expand" | "upscale" | "ocr" | "layers";
+export type OcrLine = { text: string; confidence: number; polygon: Array<{ x: number; y: number }> };
+export type EditTask = {
+    id: string;
+    documentId: string;
+    revision: number;
+    status: "queued" | "running" | "succeeded" | "failed" | "canceled";
+    result?: { images?: Array<{ url: string; width?: number; height?: number }>; lines?: OcrLine[] };
+    error?: string;
+};

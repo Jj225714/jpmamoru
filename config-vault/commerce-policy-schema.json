@@ -1,0 +1,240 @@
+{
+  "id": "string",
+  "name": "string",
+  "version": "number",
+  "status": "string",
+  "sourceFileName": "string",
+  "createdAt": "string",
+  "publishedAt": "string",
+  "creativeLibraryVersion?": "number",
+  "categories?": [
+    {
+      "id": "string",
+      "parentId?": "string",
+      "name": "string",
+      "aliases": [
+        "string"
+      ],
+      "active": "boolean",
+      "order": "number",
+      "rules": [
+        {
+          "id": "string",
+          "text": "string",
+          "strength": "string",
+          "stages": [
+            "string"
+          ],
+          "key?": "string",
+          "value?": "string"
+        }
+      ],
+      "referenceIds": [
+        "string"
+      ],
+      "requirementIds": [
+        "string"
+      ],
+      "creativeBrief?": {
+        "scene?": "string",
+        "lighting?": "string",
+        "audience?": "string",
+        "people?": "string",
+        "framing?": "string"
+      },
+      "source?": {
+        "fileName": "string",
+        "sheet": "string",
+        "range": "string",
+        "originalText": "string"
+      }
+    }
+  ],
+  "profiles": [
+    {
+      "countryCode": "string",
+      "countryName": "string",
+      "locale": "string",
+      "audience": "string",
+      "visualKeywords": "string",
+      "mainImageStyle": "string",
+      "preferredColors": [
+        "string"
+      ],
+      "avoidedColors": [
+        "string"
+      ],
+      "modelPreference": "string"
+    }
+  ],
+  "rules": [
+    {
+      "id": "string",
+      "title": "string",
+      "description": "string",
+      "severity": "string",
+      "priority": "number",
+      "countries": [
+        "string"
+      ],
+      "platforms": [
+        "string"
+      ],
+      "categories": [
+        "string"
+      ],
+      "locales": [
+        "string"
+      ],
+      "assetStages": [
+        "string"
+      ],
+      "phase": "string",
+      "checker": "string",
+      "source": {
+        "fileName": "string",
+        "sheet": "string",
+        "range": "string"
+      }
+    }
+  ],
+  "templates": [
+    {
+      "id": "string",
+      "category": "string",
+      "order": "number",
+      "title": "string",
+      "requirement": "string",
+      "slot": "string",
+      "chineseCopy": "string",
+      "translationSeeds": {
+        "en-US?": "string",
+        "th-TH?": "string",
+        "vi-VN?": "string",
+        "ms-MY?": "string",
+        "fil-PH?": "string",
+        "id-ID?": "string"
+      },
+      "requiredVariables": [
+        "string"
+      ],
+      "referenceIds": [
+        "string"
+      ]
+    }
+  ],
+  "requirementPresets": [
+    {
+      "id": "string",
+      "category": "string",
+      "order": "number",
+      "title": "string",
+      "stage": "string",
+      "enabledByDefault": "boolean",
+      "defaultCount": "number",
+      "prompt": "string",
+      "layout": "string",
+      "chineseCopy": "string",
+      "translationSeeds": {
+        "en-US?": "string",
+        "th-TH?": "string",
+        "vi-VN?": "string",
+        "ms-MY?": "string",
+        "fil-PH?": "string",
+        "id-ID?": "string"
+      },
+      "requiredFacts": [
+        "string"
+      ],
+      "referenceIds": [
+        "string"
+      ],
+      "variantScope": "string",
+      "needsReview": "boolean",
+      "visualMode?": "string",
+      "visualKind?": "string",
+      "creativeBrief?": {
+        "scene?": "string",
+        "lighting?": "string",
+        "audience?": "string",
+        "people?": "string",
+        "framing?": "string"
+      },
+      "recipeRole?": "string",
+      "generationStrategy?": "string",
+      "detailPurpose?": "string"
+    }
+  ],
+  "references": [
+    {
+      "id": "string",
+      "name": "string",
+      "url": "string",
+      "source": "string",
+      "sheet": "string",
+      "anchor": "string",
+      "kind": "string"
+    }
+  ],
+  "siteReferences": [
+    {
+      "id": "string",
+      "product": "string",
+      "locale?": "string",
+      "url?": "string",
+      "referenceIds": [
+        "string"
+      ],
+      "note?": "string"
+    }
+  ],
+  "globalStandards": [
+    "string"
+  ],
+  "watermarkOpacityRange?": [
+    "number"
+  ],
+  "generationDefaults?": {
+    "assetCounts?": {
+      "scene": "number",
+      "detail": "number",
+      "usage-size": "number",
+      "detail-white": "number"
+    },
+    "marketingEnabled?": "boolean",
+    "siteImageMode?": "string",
+    "delivery?": "string",
+    "creativeBrief?": {
+      "scene?": "string",
+      "lighting?": "string",
+      "audience?": "string",
+      "people?": "string",
+      "framing?": "string"
+    },
+    "outputSpec?": {
+      "size": "number",
+      "format": "string",
+      "maxBytes": "number",
+      "colorSpace": "string",
+      "dpi": "number"
+    },
+    "overlay?": {
+      "logo": {
+        "applyTo": "string",
+        "customStages": [
+          "string"
+        ],
+        "placement": "string"
+      },
+      "watermark": {
+        "applyTo": "string",
+        "customStages": [
+          "string"
+        ],
+        "mode": "string",
+        "position": "string",
+        "opacity": "number"
+      }
+    }
+  }
+}
